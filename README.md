@@ -1,3 +1,5 @@
+# [furpoll](https://hrzn.ee/kivikakk/furpoll)
+
 You will certainly not regret adding this NixOS module
 
 ```nix
