@@ -13,7 +13,7 @@
       packages.default = pkgs.writeScriptBin "furpoll" ''
         #!/usr/bin/env ruby
         URL = "https://www.furaffinity.net/msg/pms/"
-        COOKIE = ARGV.shift
+        COOKIE = File.read(ARGV.shift).strip
         SUBJECT = ARGV.shift
         FROM = ARGV.shift
         TO = ARGV.shift
@@ -75,9 +75,9 @@
             description = "Group user account belongs to (defaults to 'furpoll', which it will create).";
             default = "furpoll";
           };
-          cookie = mkOption {
-            type = types.str;
-            description = "Cookie value to authenticate with FurAffinity.";
+          cookieFile = mkOption {
+            type = types.path;
+            description = "Path to file with cookie value to authenticate with FurAffinity.";
           };
           calendar = mkOption {
             type = types.str;
@@ -115,7 +115,7 @@
               set -eu
               # NO CLAIMS ARE MADE AS TO THE SUITABILITY OF THE FOLLOWING
               # INTERPOLATIONS FOR ANY PURPOSE, EVEN MERCHANTABILITY(!!).
-              ${ruby} -Eutf-8 ${furpoll} "${cfg.cookie}" "${cfg.subject}" "${cfg.from}" "${cfg.to}"
+              ${ruby} -Eutf-8 ${furpoll} "${cfg.cookieFile}" "${cfg.subject}" "${cfg.from}" "${cfg.to}"
             '';
             serviceConfig = {
               Type = "oneshot";
