@@ -20,17 +20,21 @@
 
         out = `${pkgs.curl}/bin/curl -s -H"Cookie: #{COOKIE}" #{URL}`
 
-        msg = nil
+        msg = []
         if out =~ /class="no-sub"/
-          msg = "Need login again."
+          msg << "Need login again."
         else
           count = out.scan(/note-unread/).count
           if count > 0
-            msg = "You've got mail!"
+            msg << "You've got mail!"
+          end
+          count = out.scan(/"\d+ Comment Notifications?"/).count
+          if count > 0
+            msg << "You've got a comment reply!"
           end
         end
 
-        if !msg.nil?
+        if msg.any?
           # This can surely not backfire.
           IO.popen(["/run/wrappers/bin/sendmail", "-t"], "r+") do |f|
             f.puts <<~OUT
@@ -38,7 +42,7 @@
               From: #{FROM}
               To: #{TO}
 
-              #{msg}
+              #{msg.join("\n")}
 
             OUT
             f.close_write
