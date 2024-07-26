@@ -26,11 +26,11 @@
         else
           count = out.scan(/note-unread/).count
           if count > 0
-            msg << "You've got mail!"
+            msg << "You've got mail! -- https://www.furaffinity.net/msg/pms/"
           end
           count = out.scan(/"\d+ Comment Notifications?"/).count
           if count > 0
-            msg << "You've got a comment reply!"
+            msg << "You've got a comment reply! -- https://www.furaffinity.net/msg/others/#comments"
           end
         end
 
